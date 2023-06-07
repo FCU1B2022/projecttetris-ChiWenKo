@@ -518,7 +518,6 @@ void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
                             
                             // 開始新的遊戲
                             move(canvas, state->x, state->y, state->rotate, state->x, state->y, state->rotate, state->queue[0]);
-                            
 
                            // 開始新的遊戲迴圈
                             break;
