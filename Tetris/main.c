@@ -425,6 +425,10 @@ int clearLine(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH]) {
     return linesCleared;
 }
 
+void resetGame(State* state) {
+
+}
+
 void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
 {
     //如果玩家按下旋轉按鈕，則計算新的旋轉狀態 
@@ -491,13 +495,16 @@ void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
                     if (_kbhit()) {
                         char input = _getch();
                         if (input == 'R' || input == 'r') {
+                            // 清除 "GAME OVER" 訊息
+                            printf("\033[%d;%dH                                 \n", CANVAS_HEIGHT - 3, CANVAS_WIDTH * 2 + 6);
+                            printf("\033[%d;%dH                                        \n", CANVAS_HEIGHT - 1, CANVAS_WIDTH * 2 + 5, 0);
+                            
                             // 重新初始化遊戲狀態
                             state->x = CANVAS_WIDTH / 2;
                             state->y = 0;
                             state->score = 0;
                             state->rotate = 0;
                             state->fallTime = 0;
-
                             for (int i = 0; i < 4; i++) {
                                 state->queue[i] = rand() % 7;
                             }
@@ -508,8 +515,12 @@ void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
                                     resetBlock(&canvas[i][j]);
                                 }
                             }
+                            
+                            // 開始新的遊戲
+                            move(canvas, state->x, state->y, state->rotate, state->x, state->y, state->rotate, state->queue[0]);
+                            
 
-                            // 開始新的遊戲迴圈
+                           // 開始新的遊戲迴圈
                             break;
                         }
                         else if (input == 'Q' || input == 'q') {
@@ -566,9 +577,7 @@ int main()
     {
         logic(canvas, &state);
         printCanvas(canvas, &state);
-
         Sleep(100);
     }
   
-
 }
